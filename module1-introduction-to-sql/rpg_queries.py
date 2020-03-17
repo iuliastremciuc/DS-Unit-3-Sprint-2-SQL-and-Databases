@@ -37,13 +37,12 @@ print("TOTAL ITEMS: ", result4[0][0])
 
 ##How many of the Items are weapons? How many are not?
 query3 = """
-SELECT
-   armory_weapon.item_ptr_id,
-   armory_item.item_id,
-   armory_item.name
-   
-FROM  armory_item
-JOIN armory_weapon ON armory_item.item_id = armory_weapon.item_ptr_id
+SELECT 
+ sum(w.item_ptr_id is null) as non_weapon_count,
+ sum(w.item_ptr_id is not null) as weapon_count
+ 
+FROM armory_item i 
+LEFT JOIN armory_weapon w ON  i.item_id = w.item_ptr_id
 """ 
 result5 = cursor.execute(query3)
 print("Result: ", result5)
@@ -77,11 +76,14 @@ for row in result8:
 # How many Weapons does each character have? (Return first 20 rows)
 query5 = """
 SELECT
-   charactercreator_character_inventory.character_id,
-   count(DISTINCT charactercreator_character_inventory.item_id) as Weapons_per_Character
-FROM charactercreator_character_inventory
-JOIN armory_weapon ON charactercreator_character_inventory.item_id = armory_weapon.item_ptr_id
-GROUP BY charactercreator_character_inventory.character_id
+  c.character_id,
+  c.name as char_name,
+  count(inv.item_id) as item_count,
+  count(w.item_ptr_id) as weapon_count
+FROM charactercreator_character c
+LEFT JOIN charactercreator_character_inventory inv ON inv.character_id = c.character_id
+LEFT JOIN armory_weapon w on inv.item_id = w.item_ptr_id
+GROUP BY c.character_id -- row per what?
 LIMIT 20
 """
 result9 = cursor.execute(query5)
