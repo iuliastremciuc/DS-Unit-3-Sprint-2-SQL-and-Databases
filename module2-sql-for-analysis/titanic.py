@@ -44,7 +44,7 @@ cur.execute("SELECT * FROM titanic;")
 result = cur.fetchall()
 print("Result: ", len(result))
 
-data = list(df.iterrows())
+data = list(df.itertuples(index = False))
 
 insert_query = """INSERT INTO titanic(Survived, Pclass, Name, Sex, Age, Siblings_Spouses_Aboard, Parents_Children_Aboard, Fare) 
     VALUES(%s, %s, %s, %s, %s, %s, %s, %s)
@@ -61,6 +61,8 @@ cur.execute("SELECT * FROM titanic;")
 result = cur.fetchall()
 
 print("Result: ", len(result))
+
+conn.commit()
 
 
 
