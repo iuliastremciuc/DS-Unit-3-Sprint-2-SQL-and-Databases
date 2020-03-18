@@ -21,11 +21,6 @@ print(df.head(5))
 print(df.columns)
 
 print(df.loc[[0]])
-#iterrows()
-#data = [row for row in df.iterrows()]
-## for row in data: 
-## curs.execute(my_query, row)
-
 query = """
 CREATE TABLE IF NOT EXISTS titanic(
     id serial primary key,
@@ -53,14 +48,10 @@ insert_query = """INSERT INTO titanic(Survived, Pclass, Name, Sex, Age, Siblings
 for row in data:
     cur.execute(insert_query, row)
 
-#titanic_list = list(df.iterrows())
-#execute_values(cur, insert_query, titanic_list)
-
-
 cur.execute("SELECT * FROM titanic;")
 result = cur.fetchall()
 
-print("Result: ", len(result))
+print("Final result: ", len(result))
 
 conn.commit()
 
